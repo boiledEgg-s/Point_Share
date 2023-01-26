@@ -1,29 +1,42 @@
 package com.softsquared.template.kotlin.src.main
 
+import android.content.ContentValues
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Base64
+import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.softsquared.template.kotlin.R
 import com.softsquared.template.kotlin.config.BaseActivity
 import com.softsquared.template.kotlin.databinding.ActivityMainBinding
-import com.softsquared.template.kotlin.src.main.home.HomeFragment
+import com.softsquared.template.kotlin.src.main.map.MapFragment
 import com.softsquared.template.kotlin.src.main.myPage.MyPageFragment
+import com.softsquared.template.kotlin.src.main.starPoint.StarPointFragment
+import java.security.MessageDigest
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        supportFragmentManager.beginTransaction().replace(R.id.main_frm, HomeFragment()).commitAllowingStateLoss()
+        //supportFragmentManager.beginTransaction().replace(R.id.main_frm, MyPageFragment()).commitAllowingStateLoss()
 
         binding.mainBtmNav.run {
             setOnItemSelectedListener { item ->
                 when (item.itemId) {
                     R.id.menu_main_btm_nav_home -> {
                         supportFragmentManager.beginTransaction()
-                            .replace(R.id.main_frm, HomeFragment())
+                            .replace(R.id.main_frm, MapFragment())
                             .commitAllowingStateLoss()
                     }
-                    R.id.menu_main_btm_nav_my_page -> {
+
+                    R.id.menu_main_btm_nav_popular_point -> {
+                        supportFragmentManager.beginTransaction()
+                            .replace(R.id.main_frm, StarPointFragment())
+                            .commitAllowingStateLoss()
+                    }
+
+                    R.id.menu_main_btm_nav_my_point -> {
                         supportFragmentManager.beginTransaction()
                             .replace(R.id.main_frm, MyPageFragment())
                             .commitAllowingStateLoss()
@@ -34,4 +47,5 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             selectedItemId = R.id.menu_main_btm_nav_home
         }
     }
+
 }

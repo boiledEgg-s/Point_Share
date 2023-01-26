@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:gravity="center">
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="327dp"
+        android:layout_height="136dp"
+        app:cardCornerRadius="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:background="@drawable/temp_img">
+
+            <TextView
+                android:id="@+id/my_page_review_tv1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="TITLE"
+                android:textColor="@color/white"
+                android:fontFamily="@font/sf_compat_regular"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@id/my_page_review_tv2"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView
+                android:id="@+id/my_page_review_tv2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="작성 날짜"
+                android:textColor="@color/white"
+                android:fontFamily="@font/sf_compat_regular"
+                android:textSize="14sp"
+                app:layout_constraintTop_toBottomOf="@id/my_page_review_tv1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

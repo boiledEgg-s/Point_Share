@@ -4,17 +4,24 @@
 
     <item
         android:id="@+id/menu_main_btm_nav_home"
-        android:icon="@drawable/ic_total_view_unselected"
+        android:icon="@drawable/menu_main_bottom_nav_home"
         app:showAsAction="always"
         android:enabled="true"
         android:checkable="true"
         android:title="@string/main_btm_nav_home_title" />
 
     <item
-        android:id="@+id/menu_main_btm_nav_my_page"
-        android:icon="@drawable/ic_setting_view_unselected"
+        android:id="@+id/menu_main_btm_nav_popular_point"
+        android:icon="@drawable/menu_main_bottom_nav_popular_point"
         app:showAsAction="always"
         android:enabled="true"
-        android:title="@string/main_btm_nav_my_page_title" />
+        android:title="@string/main_btm_nav_popular_point_title" />
+
+    <item
+        android:id="@+id/menu_main_btm_nav_my_point"
+        android:icon="@drawable/menu_main_bottom_nav_my_point"
+        app:showAsAction="always"
+        android:enabled="true"
+        android:title="@string/main_btm_nav_my_point_title"/>
 
 </menu>

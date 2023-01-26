@@ -9,4 +9,11 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
+    <style name="menu_bar">
+        <item name="fontFamily">@font/sf_compact</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
 </resources>

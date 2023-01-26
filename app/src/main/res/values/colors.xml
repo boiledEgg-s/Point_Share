@@ -4,12 +4,26 @@
     <color name="colorPrimaryDark">#889dfe</color>
     <color name="colorAccent">#889dfe</color>
 
-    <!-- 기본 -->
-    <color name="white">#FFFFFF</color>
-    <color name="black">#000000</color>
-
     <color name="whiteForBackground">#FFFFFF</color>
     <color name="blackForText">#4a4a4a</color>
     <color name="redForText">#d9534f</color>
+
+    <!--MAP-->
+    <color name="floating_button_color">#CCFFFFFF</color>
+    <color name="floating_button_border">#40000000</color>
+
+    <!--MAIN-->
+    <color name="black">#000000</color>
+    <color name="main_skyblue">#6BC8E8</color>
+    <color name="deep_grey">#2B2C2C</color>
+    <color name="shadow">#6c6c6c</color>
+    <color name="middlegrey">#b6b6b6</color>
+    <color name="lightgrey">#d9d9d9</color>
+    <color name="brightgrey">#f5f5f5</color>
+    <color name="white">#FFFFFF</color>
+    <color name="guide">#ff7ebc</color>
+    <color name="safe">#91cc54</color>
+    <color name="danger">#F44D57</color>
+
 
 </resources>
