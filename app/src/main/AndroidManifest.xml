@@ -9,14 +9,16 @@
 
     <application
         android:name=".config.ApplicationClass"
+
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
+
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:ignore="AllowBackup">
+        tools:ignore="AllowBackup,ExtraText">
         <activity
             android:name=".src.main.search.SearchResultActivity"
             android:exported="false"
@@ -54,6 +56,33 @@
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        // 로그인
+        <activity
+            android:name=".src.main.login.LoginActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        //
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <!-- Redirect URI: "kakao{NATIVE_APP_KEY}://oauth“ -->
+                <data android:host="oauth"
+                    android:scheme="kakao04d86cfd9ae3ae89174db5224a3c6132" />
+            </intent-filter>
+        </activity>
     </application>
+
+
 
 </manifest>
