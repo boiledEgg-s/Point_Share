@@ -24,7 +24,7 @@
                 android:layout_marginTop="12dp"
                 android:background="@drawable/map_location_button_bg"
                 android:backgroundTint="@color/main_skyblue"
-                android:src="@drawable/temp_user_icon"
+                android:src="@drawable/user_icon_default"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

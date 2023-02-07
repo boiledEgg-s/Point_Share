@@ -11,7 +11,7 @@ import com.softsquared.template.kotlin.src.main.review.*
 
 class StarPointFragment :
     BaseFragment<FragmentStarPointBinding>(FragmentStarPointBinding::bind, R.layout.fragment_star_point) {
-    private var mCount = 0
+
     var reviewItems:ArrayList<ReviewItem> = arrayListOf()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
