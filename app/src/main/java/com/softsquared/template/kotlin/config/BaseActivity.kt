@@ -11,7 +11,7 @@ import com.softsquared.template.kotlin.util.LoadingDialog
 // 액티비티의 기본을 작성, 뷰 바인딩 활용
 abstract class BaseActivity<B : ViewBinding>(private val inflate: (LayoutInflater) -> B) :
     AppCompatActivity() {
-    protected lateinit var binding: B
+    lateinit var binding: B
         private set
     lateinit var mLoadingDialog: LoadingDialog
 

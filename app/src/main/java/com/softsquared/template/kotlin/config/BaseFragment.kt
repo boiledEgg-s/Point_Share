@@ -19,7 +19,7 @@ abstract class BaseFragment<B : ViewBinding>(
     private var _binding: B? = null
     lateinit var mLoadingDialog: LoadingDialog
 
-    protected val binding get() = _binding!!
+    val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,4 +49,5 @@ abstract class BaseFragment<B : ViewBinding>(
             mLoadingDialog.dismiss()
         }
     }
+
 }

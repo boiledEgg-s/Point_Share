@@ -1,18 +1,12 @@
 package com.softsquared.template.kotlin.src.main
 
-import android.content.ContentValues
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Base64
-import android.util.Log
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.softsquared.template.kotlin.R
 import com.softsquared.template.kotlin.config.BaseActivity
 import com.softsquared.template.kotlin.databinding.ActivityMainBinding
 import com.softsquared.template.kotlin.src.main.map.MapFragment
 import com.softsquared.template.kotlin.src.main.myPage.MyPageFragment
 import com.softsquared.template.kotlin.src.main.starPoint.StarPointFragment
-import java.security.MessageDigest
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
 

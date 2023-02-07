@@ -30,19 +30,32 @@ class ApplicationClass : Application() {
 
         // Retrofit 인스턴스, 앱 실행시 한번만 생성하여 사용합니다.
         lateinit var sRetrofit: Retrofit
+
+        val REQUIRED_PERMISSIONS = arrayOf(
+            android.Manifest.permission.READ_EXTERNAL_STORAGE
+        )
+
+        //갤러리 연동용 전역변수
+        const val REVIEW_MIN_LENGTH = 10
+        const val REQ_GALLERY = 1
+
+        //API 호출 시 파라미터 값
+        const val PARAM_KEY_IMAGE = "image"
+        const val PARAM_KEY_PRODUCT_ID = "product_id"
+        const val PARAM_KEY_REVIEW = "review_content"
+        const val PARAM_KEY_RATING = "rating"
     }
 
     // 앱이 처음 생성되는 순간, SP를 새로 만들어주고, 레트로핏 인스턴스를 생성합니다.
     override fun onCreate() {
         super.onCreate()
         sSharedPreferences =
-            applicationContext.getSharedPreferences("SOFTSQUARED_TEMPLATE_APP", MODE_PRIVATE)
+            applicationContext.getSharedPreferences("POINT_SHARE_PREF", MODE_PRIVATE)
         // 레트로핏 인스턴스 생성
         initRetrofitInstance()
 
         // kakao 로그인 api
         KakaoSdk.init(this, "04d86cfd9ae3ae89174db5224a3c6132")
-
     }
 
 

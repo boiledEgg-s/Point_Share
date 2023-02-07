@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SoftSquared Android Kotlin Template</string>
+    <string name="app_name">포인트쉐어</string>
 
     <!-- Naming Rules -->
     <!-- 도메인명_컴포넌트함축어_용도(=목적) -->
@@ -22,5 +22,7 @@
     <string name="sort_regDate">최신순</string>
 
     <string name="img_error">이미지 로딩 오류</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

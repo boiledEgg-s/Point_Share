@@ -1,9 +1,12 @@
 package com.softsquared.template.kotlin.src.main.myPage
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.softsquared.template.kotlin.databinding.MyPageReviewItemBinding
+import com.softsquared.template.kotlin.src.main.review.ReviewActivity
 import com.softsquared.template.kotlin.src.main.review.ReviewItem
 
 class MyPageRVAdapter(
@@ -27,6 +30,12 @@ class MyPageRVAdapter(
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         holder.bind(dataList[position])
+
+        holder.itemView.setOnClickListener{
+            val intent = Intent(holder.itemView.context, ReviewActivity::class.java)
+            intent.putExtra("data", dataList[position])
+            ContextCompat.startActivity(holder.itemView.context, intent, null)
+        }
     }
 
     override fun getItemCount(): Int = dataList.size
