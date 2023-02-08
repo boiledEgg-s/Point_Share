@@ -21,7 +21,9 @@ import android.view.LayoutInflater
 import android.widget.Toast
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContextCompat
@@ -33,6 +35,7 @@ import com.softsquared.template.kotlin.src.main.search.SearchActivity
 import net.daum.mf.map.api.CalloutBalloonAdapter
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
+import net.daum.mf.map.api.MapView
 
 class MapFragment :
     BaseFragment<FragmentMapBinding>(FragmentMapBinding::bind, R.layout.fragment_map) {
@@ -46,10 +49,10 @@ class MapFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         var zoom = 4
+
+
         getCurrentLocation()
         binding.mapView.setZoomLevel(zoom, true)
-
-
 
         //지도 위치 이동
         binding.mapBtnLoc.setOnClickListener {
@@ -84,6 +87,7 @@ class MapFragment :
         })
     }
 
+
     fun getCurrentLocation() {
         val permissionCheck = ContextCompat.checkSelfPermission(requireContext(), ACCESS_FINE_LOCATION)
         if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
@@ -107,6 +111,7 @@ class MapFragment :
             }
         } else {
             Toast.makeText(requireContext(), "위치 권한이 없습니다.", Toast.LENGTH_SHORT).show()
+//            binding.root.removeView(mapView)
             requestPermissions(
                 requireActivity(),
                 REQUIRED_PERMISSIONS,
@@ -152,5 +157,7 @@ class MapFragment :
             return mCalloutBalloon
         }
     }
+
+
 }
 
