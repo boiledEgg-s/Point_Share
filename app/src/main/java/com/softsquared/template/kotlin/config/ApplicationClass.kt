@@ -12,7 +12,7 @@ import com.kakao.sdk.common.KakaoSdk
 
 // 앱이 실행될때 1번만 실행이 됩니다.
 class ApplicationClass : Application() {
-    val API_URL = "https://edu-api-test.softsquared.com/"
+    val API_URL = "http://potshe.shop:3000/app"
 
     // 테스트 서버 주소
     // val API_URL = "http://dev-api.test.com/"

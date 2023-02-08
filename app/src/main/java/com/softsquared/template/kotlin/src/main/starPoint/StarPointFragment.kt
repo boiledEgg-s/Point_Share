@@ -1,6 +1,7 @@
 package com.softsquared.template.kotlin.src.main.starPoint
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -39,5 +40,21 @@ class StarPointFragment :
         binding.starReviewRv.adapter = reviewRVAdapter
         binding.starReviewRv.layoutManager =
             LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+
+        binding.starReviewRv.addOnScrollListener(object: RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val lastVisibleItemPosition =
+                    (binding.starReviewRv.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
+                val itemTotalCount = binding.starReviewRv.adapter?.itemCount
+                if (lastVisibleItemPosition + 1 >= reviewItems.size) {
+                    //리스트 마지막(바닥) 도착!!!!! 다음 페이지 데이터 로드!!
+                    Log.d("from recycler view", "reached end")
+                }
+            }
+        })
     }
+
+
 }
