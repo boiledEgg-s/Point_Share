@@ -47,7 +47,6 @@ class MapFragment :
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         var zoom = 4
 
 
@@ -85,6 +84,8 @@ class MapFragment :
                 return true //or false
             }
         })
+
+        super.onViewCreated(view, savedInstanceState)
     }
 
 
