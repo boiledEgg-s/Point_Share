@@ -1,27 +1,20 @@
 package com.softsquared.template.kotlin.src.main.search
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.softsquared.template.kotlin.databinding.ReviewItemBinding
 import com.softsquared.template.kotlin.src.main.review.ReviewActivity
-import com.softsquared.template.kotlin.src.main.search.model.ReviewDTO
-import com.softsquared.template.kotlin.src.main.search.model.SearchResultDTO
-import java.net.URL
+import com.softsquared.template.kotlin.src.retrofit.model.GetPointDTO
 
 class SearchResultRVAdapter(
-    private val dataList: List<SearchResultDTO>
+    private val dataList: List<GetPointDTO>
 ) : RecyclerView.Adapter<SearchResultRVAdapter.ItemViewHolder>(){
     lateinit var binding: ReviewItemBinding
     inner class ItemViewHolder(val binding:ReviewItemBinding):RecyclerView.ViewHolder(binding.root){
-        fun bind(data: SearchResultDTO){
+        fun bind(data: GetPointDTO){
             //binding.itemIvProfile
             binding.itemTvName.text = data.nickname!!.replace("\"", "")
             binding.itemTvContent.text = data.title!!.replace("\"", "")
@@ -71,6 +64,7 @@ class SearchResultRVAdapter(
         holder.itemView.setOnClickListener{
             val intent = Intent(holder.itemView.context, ReviewActivity::class.java)
             intent.putExtra("pointId", dataList[position].point_id)
+            intent.putExtra("userId", dataList[position].user_id)
             ContextCompat.startActivity(holder.itemView.context, intent, null)
         }
     }

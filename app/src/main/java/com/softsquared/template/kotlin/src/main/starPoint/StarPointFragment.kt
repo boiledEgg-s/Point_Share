@@ -9,15 +9,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.softsquared.template.kotlin.R
 import com.softsquared.template.kotlin.config.BaseFragment
 import com.softsquared.template.kotlin.databinding.FragmentStarPointBinding
-import com.softsquared.template.kotlin.src.main.search.model.StarPointDTO
-import com.softsquared.template.kotlin.src.main.search.model.StarPointResponse
+import com.softsquared.template.kotlin.src.main.search.model.StarPointItem
+import com.softsquared.template.kotlin.src.retrofit.RetrofitClassInterface
+import com.softsquared.template.kotlin.src.retrofit.RetrofitService
+import com.softsquared.template.kotlin.src.retrofit.model.PointResponse
+import com.softsquared.template.kotlin.src.retrofit.model.UserResponse
 
 class StarPointFragment :
-    BaseFragment<FragmentStarPointBinding>(FragmentStarPointBinding::bind, R.layout.fragment_star_point), StarPointFragmentInterface {
+    BaseFragment<FragmentStarPointBinding>(FragmentStarPointBinding::bind, R.layout.fragment_star_point), RetrofitClassInterface {
 
-    private var reviewItems:ArrayList<StarPointDTO> = arrayListOf()
-    private val service: StarPointService = StarPointService(this)
+    private var reviewItems:ArrayList<StarPointItem> = arrayListOf()
+    private val service = RetrofitService(this)
     private var pageId = 1
+    private var profile = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,22 +53,19 @@ class StarPointFragment :
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    override fun onGetUserSuccess(response: StarPointResponse) {
+    override fun onGetPointsSuccess(response: PointResponse) {
         val responseData = response.result
         // 데이터가 안 넘어올 수 있어서 체
         if (responseData != null) {
             Log.d("Retrofit2 in SearchResultFragment", "onGetUser Success")
-            for(review in responseData)
-            {
-                Log.d("GetReview by Retrofit", "${review.point_id}")
-            }
             for(review in responseData){
+
                 reviewItems.apply{
                     this.add(
-                        StarPointDTO(review.point_id, review.title, review.point_image_list, review.nickname,
-                            review.point_type, review.creature, review.point_date, review.content, review.likes,
-                            review.location, review.latitude, review.longitude)
-                    )}
+                        StarPointItem(review.user_id,review.point_id, review.title, review.point_image_list, review.nickname,
+                            profile, review.point_date, review.content, review.likes, review.location)
+                    )
+                }
             }
             binding.starReviewRv.adapter?.notifyDataSetChanged()
             Log.d("Retrofit2 in SearchResultFragment", "entered, review size = ${reviewItems.size}")
@@ -76,10 +77,4 @@ class StarPointFragment :
                 Log.w("Retrofit2", "NOTNULL Response Not Successful ${response.code}")
         }
     }
-
-    override fun onGetUserFailure(message: String) {
-        Log.e("Retrofit2", "$message")
-    }
-
-
 }

@@ -16,9 +16,7 @@ import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.icu.util.Calendar
-import android.net.Uri
 import android.net.http.SslError
-import android.os.Build
 import android.os.Bundle
 import android.os.Message
 import android.provider.MediaStore
@@ -36,7 +34,7 @@ import com.softsquared.template.kotlin.R
 import com.softsquared.template.kotlin.config.ApplicationClass
 import com.softsquared.template.kotlin.config.BaseActivity
 import com.softsquared.template.kotlin.databinding.ActivityNewReviewBinding
-import com.softsquared.template.kotlin.src.main.review.model.PostReviewRequest
+import com.softsquared.template.kotlin.src.retrofit.model.PostPointDTO
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -50,7 +48,7 @@ class NewReviewActivity : BaseActivity<ActivityNewReviewBinding>(ActivityNewRevi
     lateinit var photoRVAdapter:NewReviewPhotoAdapter
 
     private var imageFiles = arrayListOf<File>()
-    private lateinit var postReviewRequest:PostReviewRequest
+    private lateinit var postReviewRequest:PostPointDTO
 
     private val imageResult = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -111,7 +109,7 @@ class NewReviewActivity : BaseActivity<ActivityNewReviewBinding>(ActivityNewRevi
         //포인트 등록 버튼
             binding.newReviewBtnFinish.setOnClickListener {
                 if(check) {
-                    postReviewRequest = PostReviewRequest(null,
+                    postReviewRequest = PostPointDTO(null,
                         binding.newReviewTvTitle.text.toString(),
                         binding.newReviewTvContent.text.toString(),
                         binding.newReviewTvType.text.toString(),

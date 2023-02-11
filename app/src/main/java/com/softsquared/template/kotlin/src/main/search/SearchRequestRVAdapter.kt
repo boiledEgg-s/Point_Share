@@ -5,17 +5,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.softsquared.template.kotlin.databinding.SearchItemBinding
 
-class SearchRVAdapter(
+class SearchRequestRVAdapter(
     private val dataList: ArrayList<String>,
     val onClickDelete: (str: String) -> Unit,
     val onClickBtn: (str: String) -> Unit
-) : RecyclerView.Adapter<SearchRVAdapter.ViewHolder>(){
+) : RecyclerView.Adapter<SearchRequestRVAdapter.ViewHolder>(){
 
     inner class ViewHolder(val binding:SearchItemBinding):RecyclerView.ViewHolder(binding.root){
         fun bind(data: String){
             binding.searchItemTv.text = data
-
-
         }
 
     }

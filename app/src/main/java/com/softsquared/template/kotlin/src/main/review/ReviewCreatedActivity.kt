@@ -6,20 +6,21 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import com.softsquared.template.kotlin.config.BaseActivity
 import com.softsquared.template.kotlin.databinding.ActivityReviewCreatedBinding
-import com.softsquared.template.kotlin.src.main.review.model.PostReviewRequest
-import com.softsquared.template.kotlin.src.main.search.model.ReviewResponse
+import com.softsquared.template.kotlin.src.retrofit.RetrofitClassInterface
+import com.softsquared.template.kotlin.src.retrofit.RetrofitService
+import com.softsquared.template.kotlin.src.retrofit.model.*
 
 class ReviewCreatedActivity: BaseActivity<ActivityReviewCreatedBinding>(
-    ActivityReviewCreatedBinding::inflate), ReviewActivityInterface{
-    private val service = ReviewService(this)
+    ActivityReviewCreatedBinding::inflate), RetrofitClassInterface{
+    private val service = RetrofitService(this)
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
 
-        val data = intent.getSerializableExtra("data", PostReviewRequest::class.java) as PostReviewRequest
-        service.postReview(data)
+        val data = intent.getSerializableExtra("data", PostPointDTO::class.java) as PostPointDTO
+        service.tryPostPoint(data)
 
         Log.d("REVIEW_CREATED_ACTIVITY", "${data.title}, ${data.content}, ${data.point_date}, ${data.point_Type} ")
 
@@ -28,15 +29,13 @@ class ReviewCreatedActivity: BaseActivity<ActivityReviewCreatedBinding>(
         }
     }
 
-    override fun onGetUserSuccess(response: ReviewResponse) {}
-
-    override fun onGetUserFailure(message: String) {}
-
-    override fun onPostUserSuccess(response: ReviewResponse) {
-
+    override fun onPostPointSuccess(message: String) {
+        super.onPostPointSuccess(message)
+        Log.d("REVIEW CREATED", "POST SUCCESSFUL")
     }
 
-    override fun onPostUserFailure(message: String) {
-        Log.e("Retrofit2", "$message")
+    override fun onPostPointFailure(message: String) {
+        super.onPostPointFailure(message)
+        Log.d("REVIEW CREATED", "POST FAILED")
     }
 }

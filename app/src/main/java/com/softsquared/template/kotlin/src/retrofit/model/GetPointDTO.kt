@@ -1,8 +1,9 @@
-package com.softsquared.template.kotlin.src.main.search.model
+package com.softsquared.template.kotlin.src.retrofit.model
 
 import java.io.Serializable
 
-data class SearchResultDTO(
+data class GetPointDTO(
+    var user_id:String?=null,
     var point_id:String?=null,
     var title:String?=null,
     var point_image_list:String?=null,

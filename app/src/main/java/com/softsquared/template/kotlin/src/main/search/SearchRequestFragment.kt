@@ -11,12 +11,12 @@ import com.softsquared.template.kotlin.databinding.FragmentSearchRequestBinding
 
 class SearchRequestFragment :
     BaseFragment<FragmentSearchRequestBinding>(FragmentSearchRequestBinding::bind, R.layout.fragment_search_request) {
-    lateinit var searchRVAdapter: SearchRVAdapter
+    lateinit var searchRVAdapter: SearchRequestRVAdapter
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        searchRVAdapter = SearchRVAdapter((activity as SearchActivity).searchArr,
+        searchRVAdapter = SearchRequestRVAdapter((activity as SearchActivity).searchArr,
             onClickDelete = { deleteSearchString(it)},
             onClickBtn = { sendSearchString(it) })
         binding.searchRv.adapter = searchRVAdapter

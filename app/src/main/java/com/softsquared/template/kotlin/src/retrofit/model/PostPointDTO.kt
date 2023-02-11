@@ -1,13 +1,11 @@
-package com.softsquared.template.kotlin.src.main.review.model
+package com.softsquared.template.kotlin.src.retrofit.model
 
-import okhttp3.MultipartBody
-import retrofit2.http.Multipart
 import java.io.File
 import java.io.Serializable
 
 
-data class PostReviewRequest(
-    var userId:String ?= null,
+data class PostPointDTO(
+    var userId:String?=null,
     var title:String,
     var content:String,
     var point_Type:String,

@@ -9,17 +9,20 @@ import androidx.recyclerview.widget.RecyclerView
 import com.softsquared.template.kotlin.R
 import com.softsquared.template.kotlin.config.BaseFragment
 import com.softsquared.template.kotlin.databinding.FragmentSearchResultBinding
-import com.softsquared.template.kotlin.src.main.search.model.ReviewDTO
-import com.softsquared.template.kotlin.src.main.search.model.SearchResultDTO
-import com.softsquared.template.kotlin.src.main.search.model.StarPointResponse
+import com.softsquared.template.kotlin.src.main.MainActivity
+import com.softsquared.template.kotlin.src.retrofit.RetrofitClassInterface
+import com.softsquared.template.kotlin.src.retrofit.RetrofitService
+import com.softsquared.template.kotlin.src.retrofit.model.GetPointDTO
+import com.softsquared.template.kotlin.src.retrofit.model.PointResponse
 
 class SearchResultFragment :
-    BaseFragment<FragmentSearchResultBinding>(FragmentSearchResultBinding::bind, R.layout.fragment_search_result), SearchResultFragmentInterface{
+    BaseFragment<FragmentSearchResultBinding>(FragmentSearchResultBinding::bind, R.layout.fragment_search_result), RetrofitClassInterface{
 
-    lateinit var searchStr:String
+    private lateinit var searchStr:String
+    private var order:String = "추천순"
     lateinit var reviewRVAdapter: SearchResultRVAdapter
-    var reviewItems:ArrayList<SearchResultDTO> = arrayListOf()
-    private lateinit var service: SearchResultService
+    var reviewItems:ArrayList<GetPointDTO> = arrayListOf()
+    private var service = RetrofitService(this)
     private var pageId = 1
 
 
@@ -34,13 +37,13 @@ class SearchResultFragment :
         binding.searchResultRv.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
 
-        //레트로핏 관련 서비스 객체 생성
-        service = SearchResultService(this)
-        service.tryGetPoints(null, null, pageId.toString())
-
-
         searchStr = (activity as SearchActivity).binding.mapEtSearch.text.toString()
         (activity as SearchActivity).binding.mapEtSearch.isCursorVisible = false
+
+        //레트로핏 관련 서비스 객체 생성
+        service.tryGetPoints(searchStr, null, pageId.toString())
+
+
 
         //
         (activity as SearchActivity).binding.mapIvBack.setOnClickListener{
@@ -58,21 +61,19 @@ class SearchResultFragment :
                 if (lastVisibleItemPosition + 1 >= reviewItems.size) {
                     //리스트 마지막(바닥) 도착!!!!! 다음 페이지 데이터 로드!!
                     Log.d("from recycler view", "reached end")
-                    service.tryGetPoints(null, "최신순", (pageId++).toString())
+                    service.tryGetPoints(searchStr, order, (pageId++).toString())
                 }
             }
         })
 
     }
 
-    private fun setRecyclerView(arr:ArrayList<ReviewDTO>){
-    }
 
     @SuppressLint("NotifyDataSetChanged")
-    override fun onGetUserSuccess(response: StarPointResponse) {
+    override fun onGetPointsSuccess(response: PointResponse) {
         val responseData = response.result
         // 데이터가 안 넘어올 수 있어서 체
-        if (responseData != null) {
+        if (response.isSuccess) {
             Log.d("Retrofit2 in SearchResultFragment", "onGetUser Success")
             for(review in responseData)
             {
@@ -81,26 +82,14 @@ class SearchResultFragment :
             for(review in responseData){
                 reviewItems.apply{
                     this.add(
-                        SearchResultDTO(review.point_id, review.title, review.point_image_list, review.nickname,
-                    review.point_type, review.creature, review.point_date, review.content, review.likes,
+                        GetPointDTO(review.user_id, review.point_id, review.title, review.point_image_list, review.nickname,
+                        review.point_type, review.creature, review.point_date, review.content, review.likes,
                         review.location, review.latitude, review.longitude)
                 )}
             }
             binding.searchResultRv.adapter?.notifyDataSetChanged()
             Log.d("Retrofit2 in SearchResultFragment", "entered, review size = ${reviewItems.size}")
-        } else {
-            if (responseData == null)
-            //val list: List<>()
-                Log.w("Retrofit2", "NULLPTR Response Not Successful ${response.code}")
-            else
-                Log.w("Retrofit2", "NOTNULL Response Not Successful ${response.code}")
         }
     }
-
-    override fun onGetUserFailure(message: String) {
-        Log.e("Retrofit2", "$message")
-    }
-
-
 
 }
