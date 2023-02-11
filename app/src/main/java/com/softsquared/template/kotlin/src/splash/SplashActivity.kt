@@ -6,6 +6,8 @@ import android.os.Handler
 import android.os.Looper
 import com.softsquared.template.kotlin.config.BaseActivity
 import com.softsquared.template.kotlin.databinding.ActivitySplashBinding
+import com.softsquared.template.kotlin.src.main.MainActivity
+import com.softsquared.template.kotlin.src.main.login.LoginActivity
 import com.softsquared.template.kotlin.src.permission.PermissionActivity
 import java.security.Permission
 

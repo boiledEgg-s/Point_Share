@@ -10,7 +10,6 @@ import androidx.core.content.ContextCompat
 import com.softsquared.template.kotlin.config.BaseActivity
 import com.softsquared.template.kotlin.databinding.ActivityPermissionBinding
 import com.softsquared.template.kotlin.src.main.MainActivity
-import com.softsquared.template.kotlin.src.splash.SplashActivity
 
 class PermissionActivity : BaseActivity<ActivityPermissionBinding>(ActivityPermissionBinding::inflate) {
 
@@ -31,7 +30,6 @@ class PermissionActivity : BaseActivity<ActivityPermissionBinding>(ActivityPermi
         val permissionCheck_Location = ContextCompat.checkSelfPermission(this,
             Manifest.permission.ACCESS_FINE_LOCATION
         )
-
 
         if (permissionCheck_Location != PackageManager.PERMISSION_GRANTED) {
             if(permissionCheck_Location != PackageManager.PERMISSION_GRANTED)

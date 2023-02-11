@@ -47,7 +47,7 @@ class MyPageFragment :
         if(result.resultCode == RESULT_OK){
             val imageUri = result.data?.data
             imageUri?.let{
-                imageFile = File(getRealPathFromURI(it))
+                imageFile = File(ApplicationClass().getRealPathFromURI(it, requireContext()))
                 editPref.putString("profileImg_String", it.toString())
                 editPref.apply() // SharedPreferences 적용
 
@@ -113,7 +113,7 @@ class MyPageFragment :
                 Manifest.permission.ACCESS_FINE_LOCATION
             )
             if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-                navigateGallery()
+                ApplicationClass().navigateGallery(imageResult)
             }
             else if(shouldShowRequestPermissionRationale(android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 showPermissionContextPopup()
@@ -190,27 +190,8 @@ class MyPageFragment :
 
     ///////////////////
 
-    private fun getRealPathFromURI(uri: Uri):String {
-        val buildName = Build.MANUFACTURER
-        if(buildName.equals("Xiaomi")){
-            return uri.path!!
-        }
-        var columnIndex = 0
-        val proj = arrayOf(MediaStore.Images.Media.DATA)
-        val cursor = requireContext().contentResolver.query(uri, proj, null, null, null)
-        if(cursor!!.moveToFirst()){
-            columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-        }
-        val result = cursor.getString(columnIndex)
-        cursor.close()
-        return result
-    }
-    private fun navigateGallery() {
-        val intent = Intent(Intent.ACTION_PICK)
-        // 가져올 컨텐츠들 중에서 Image 만을 가져온다.
-        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
-        imageResult.launch(intent)
-    }
+
+
     private fun showPermissionContextPopup() {
         AlertDialog.Builder(requireContext())
             .setTitle("권한이 필요합니다.")

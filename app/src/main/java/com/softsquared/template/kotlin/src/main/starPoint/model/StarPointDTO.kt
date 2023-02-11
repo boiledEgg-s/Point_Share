@@ -2,7 +2,7 @@ package com.softsquared.template.kotlin.src.main.search.model
 
 import java.io.Serializable
 
-data class ReviewDTO(
+data class StarPointDTO(
     var point_id:String?=null,
     var title:String?=null,
     var point_image_list:String?=null,

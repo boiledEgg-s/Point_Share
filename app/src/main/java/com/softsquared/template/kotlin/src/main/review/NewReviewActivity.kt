@@ -36,16 +36,21 @@ import com.softsquared.template.kotlin.R
 import com.softsquared.template.kotlin.config.ApplicationClass
 import com.softsquared.template.kotlin.config.BaseActivity
 import com.softsquared.template.kotlin.databinding.ActivityNewReviewBinding
+import com.softsquared.template.kotlin.src.main.review.model.PostReviewRequest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 
 class NewReviewActivity : BaseActivity<ActivityNewReviewBinding>(ActivityNewReviewBinding::inflate){
 
     private var check = false
     private var photoArr:ArrayList<Drawable?> = arrayListOf()
     lateinit var photoRVAdapter:NewReviewPhotoAdapter
+
+    private var imageFiles = arrayListOf<File>()
+    private lateinit var postReviewRequest:PostReviewRequest
 
     private val imageResult = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -54,6 +59,11 @@ class NewReviewActivity : BaseActivity<ActivityNewReviewBinding>(ActivityNewRevi
         if(result.resultCode == RESULT_OK){
             val imageUri = result.data?.data
             imageUri?.let{
+                imageFiles.add(File(ApplicationClass().getRealPathFromURI(it, this)))
+                Log.d("CHECK PHOTO TYPE", "URI: ${imageUri.toString()}")
+                Log.d("CHECK PHOTO TYPE", "String: ${ApplicationClass().getRealPathFromURI(it, this).toString()}")
+                Log.d("CHECK PHOTO TYPE", "FILE: ${File(ApplicationClass().getRealPathFromURI(it, this)).toString()}")
+
                 val inputStream =  this.contentResolver.openInputStream(imageUri)
                 val drawable = Drawable.createFromStream(inputStream, imageUri.toString())
                 photoArr.apply {this.add(0, drawable)}
@@ -70,10 +80,6 @@ class NewReviewActivity : BaseActivity<ActivityNewReviewBinding>(ActivityNewRevi
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
-
-
-
-
 
         //뒤로 가기 버튼
         binding.newReviewIvBack.setOnClickListener{
@@ -105,7 +111,16 @@ class NewReviewActivity : BaseActivity<ActivityNewReviewBinding>(ActivityNewRevi
         //포인트 등록 버튼
             binding.newReviewBtnFinish.setOnClickListener {
                 if(check) {
+                    postReviewRequest = PostReviewRequest(null,
+                        binding.newReviewTvTitle.text.toString(),
+                        binding.newReviewTvContent.text.toString(),
+                        binding.newReviewTvType.text.toString(),
+                        binding.newReviewTvLocation.text.toString(),
+                        binding.newReviewTvProduct.text.toString(),
+                        binding.newReviewTvDate.text.toString(),
+                        imageFiles)
                     var intent = Intent(this, ReviewCreatedActivity::class.java)
+                    intent.putExtra("data", postReviewRequest)
                     startActivity(intent)
                     finish()
                 } else {
@@ -115,14 +130,21 @@ class NewReviewActivity : BaseActivity<ActivityNewReviewBinding>(ActivityNewRevi
 
         //날짜 버튼
         binding.newReviewBtnDate.setOnClickListener{
-            val dateDialog = DatePickerDialog(this, {_, year, month, day ->
-                binding.newReviewTvDate.setText(year.toString()+"."+(month+1).toString()+"."+day.toString())
+            val dateDialog = DatePickerDialog(this, {_, year, month, day -> run {
+                var str = year.toString()+"-"
+                if((month+1) < 10) str += "0"
+                str+= (month+1).toString()+"-"
+                if(day < 10) str += "0"
+                str += day.toString()
+                binding.newReviewTvDate.setText(str)
+            }
             }, year, month, day)
             dateDialog.show()
         }
 
+
         binding.newReviewTvLocation.setOnClickListener{
-            this.showKakaoAddressWebView()
+            showKakaoAddressWebView()
         }
 
         //텍스트 수정 시
@@ -170,8 +192,8 @@ class NewReviewActivity : BaseActivity<ActivityNewReviewBinding>(ActivityNewRevi
             binding.newReviewTvType.text.isNotEmpty()  &&
             binding.newReviewTvLocation.text.isNotEmpty()  &&
             binding.newReviewTvProduct.text.isNotEmpty()  &&
-            binding.newReviewTvContent.text.isNotEmpty() &&
-            this.photoArr.isNotEmpty()) {
+            binding.newReviewTvContent.text.isNotEmpty()
+        ) {
             Log.d("checking","Background must be changed")
             //binding.newReviewBtnFinish.setBackgroundColor(getColor(R.color.main_skyblue))
             check = true
@@ -200,21 +222,6 @@ class NewReviewActivity : BaseActivity<ActivityNewReviewBinding>(ActivityNewRevi
         binding.newReviewRvPhoto.adapter?.notifyDataSetChanged()
     }
 
-    fun getRealPathFromURI(uri: Uri):String {
-        val buildName = Build.MANUFACTURER
-        if(buildName.equals("Xiaomi")){
-            return uri.path!!
-        }
-        var columnIndex = 0
-        val proj = arrayOf(MediaStore.Images.Media.DATA)
-        val cursor = this.contentResolver.query(uri, proj, null, null, null)
-        if(cursor!!.moveToFirst()){
-            columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-        }
-        val result = cursor.getString(columnIndex)
-        cursor.close()
-        return result
-    }
     private fun navigateGallery() {
         val intent = Intent(Intent.ACTION_PICK)
         // 가져올 컨텐츠들 중에서 Image 만을 가져온다.
@@ -248,7 +255,7 @@ class NewReviewActivity : BaseActivity<ActivityNewReviewBinding>(ActivityNewRevi
         }
 
         binding.webView.apply {
-            addJavascriptInterface(WebViewData(), "Leaf ")
+            addJavascriptInterface(WebViewData(), "Leaf")
             webViewClient = client
             webChromeClient = chromeClient
             loadUrl("13.125.187.165/loc.php")
@@ -274,7 +281,7 @@ class NewReviewActivity : BaseActivity<ActivityNewReviewBinding>(ActivityNewRevi
 
                 withContext(CoroutineScope(Dispatchers.Main).coroutineContext) {
 
-                    binding.newReviewTvLocation.setText("($zoneCode) $roadAddress $buildingName")
+                    binding.newReviewTvLocation.setText("$roadAddress $buildingName")
 
                 }
             }
@@ -285,9 +292,10 @@ class NewReviewActivity : BaseActivity<ActivityNewReviewBinding>(ActivityNewRevi
 
         override fun onCreateWindow(view: WebView?, isDialog: Boolean, isUserGesture: Boolean, resultMsg: Message?): Boolean {
 
-            val newWebView = WebView(this@NewReviewActivity)
+            val newWebView = WebView(this@NewReviewActivity).apply{
+                settings.javaScriptEnabled = true
+            }
 
-            newWebView.settings.javaScriptEnabled = true
 
             val dialog = Dialog(this@NewReviewActivity)
 
@@ -297,6 +305,7 @@ class NewReviewActivity : BaseActivity<ActivityNewReviewBinding>(ActivityNewRevi
 
             params.width = ViewGroup.LayoutParams.MATCH_PARENT
             params.height = ViewGroup.LayoutParams.MATCH_PARENT
+
             dialog.window!!.attributes = params
             dialog.show()
 

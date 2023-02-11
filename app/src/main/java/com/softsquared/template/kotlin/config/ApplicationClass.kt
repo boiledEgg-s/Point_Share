@@ -1,8 +1,14 @@
 package com.softsquared.template.kotlin.config
 
 import android.app.Application
+import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import android.util.Log
+import androidx.activity.result.ActivityResultLauncher
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -12,7 +18,7 @@ import com.kakao.sdk.common.KakaoSdk
 
 // 앱이 실행될때 1번만 실행이 됩니다.
 class ApplicationClass : Application() {
-    val API_URL = "http://potshe.shop:3000/app"
+    val API_URL = "http://potshe.shop:3000/"
 
     // 테스트 서버 주소
     // val API_URL = "http://dev-api.test.com/"
@@ -77,5 +83,28 @@ class ApplicationClass : Application() {
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+    }
+
+    fun getRealPathFromURI(uri: Uri, context: Context):String {
+        val buildName = Build.MANUFACTURER
+        if(buildName.equals("Xiaomi")){
+            return uri.path!!
+        }
+        var columnIndex = 0
+        val proj = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor = context.contentResolver.query(uri, proj, null, null, null)
+        if(cursor!!.moveToFirst()){
+            columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        }
+        val result = cursor.getString(columnIndex)
+        cursor.close()
+        return result
+    }
+
+    fun navigateGallery(imageResult:ActivityResultLauncher<Intent>) {
+        val intent = Intent(Intent.ACTION_PICK)
+        // 가져올 컨텐츠들 중에서 Image 만을 가져온다.
+        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+        imageResult.launch(intent)
     }
 }
