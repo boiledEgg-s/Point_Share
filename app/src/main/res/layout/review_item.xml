@@ -61,8 +61,8 @@
                 android:layout_height="120dp"
                 android:layout_marginHorizontal="12dp"
                 android:layout_marginTop="8dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/temp_img"
+                android:background="@drawable/review_item_img_bg"
+                android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/item_tv_content" />
@@ -108,16 +108,17 @@
 
             <TextView
                 android:id="@+id/item_tv_location"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
+                android:layout_marginHorizontal="4dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="12dp"
                 android:fontFamily="@font/sf_compat_regular"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/item_iv_location"
-                app:layout_constraintTop_toBottomOf="@id/item_iv_image" />
+                app:layout_constraintTop_toBottomOf="@id/item_iv_image"
+                app:layout_constraintEnd_toStartOf="@id/item_iv_time"/>
 
             <!--작성 시간 표시-->
             <ImageView
@@ -134,7 +135,7 @@
 
             <TextView
                 android:id="@+id/item_tv_time"
-                android:layout_width="wrap_content"
+                android:layout_width="55dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="12dp"
                 android:layout_marginTop="8dp"

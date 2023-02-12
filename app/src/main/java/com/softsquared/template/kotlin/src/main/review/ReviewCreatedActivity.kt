@@ -20,6 +20,7 @@ class ReviewCreatedActivity: BaseActivity<ActivityReviewCreatedBinding>(
 
 
         val data = intent.getSerializableExtra("data", PostPointDTO::class.java) as PostPointDTO
+        Log.d("Review Created", data.point_date)
         service.tryPostPoint(data)
 
         Log.d("REVIEW_CREATED_ACTIVITY", "${data.title}, ${data.content}, ${data.point_date}, ${data.point_Type} ")

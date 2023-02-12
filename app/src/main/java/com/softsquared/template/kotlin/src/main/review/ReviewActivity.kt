@@ -1,57 +1,61 @@
 package com.softsquared.template.kotlin.src.main.review
 
 import android.annotation.SuppressLint
+import android.content.SharedPreferences
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.widget.CompoundButton
 import android.widget.ImageView
 import androidx.viewpager2.widget.ViewPager2
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import com.softsquared.template.kotlin.R
 import com.softsquared.template.kotlin.config.ApplicationClass
 import com.softsquared.template.kotlin.config.BaseActivity
 import com.softsquared.template.kotlin.databinding.ActivityReviewBinding
 import com.softsquared.template.kotlin.src.retrofit.RetrofitClassInterface
 import com.softsquared.template.kotlin.src.retrofit.RetrofitService
-import com.softsquared.template.kotlin.src.retrofit.model.*
+import com.softsquared.template.kotlin.src.retrofit.response.PointResponse
+import com.softsquared.template.kotlin.src.retrofit.response.UserResponse
 import java.net.URL
 
 class ReviewActivity : BaseActivity<ActivityReviewBinding>(ActivityReviewBinding::inflate), RetrofitClassInterface {
+
     private val service = RetrofitService(this)
     private var imageFiles = arrayListOf<String>()
+    lateinit var sharedPref: SharedPreferences
+    lateinit var editPref: SharedPreferences.Editor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        //temporary
-
-
-
-        binding.reviewIvProfileImg.setImageResource(R.drawable.user_icon_default)
-
-        val str = ApplicationClass.sSharedPreferences.getString("profileImg_String", null)
-
-        Log.d("REVIEW ACTIVITY PHOTO TYPE CHECKING", "str ${str.toString()}")
-
         //객체 인텐트로 받기
-//        val data = intent.getSerializableExtra("data", ReviewDTO::class.java) as ReviewDTO
-
+        //val data = intent.getSerializableExtra("data", ReviewDTO::class.java) as ReviewDTO
 
         val pointId = intent.getStringExtra("pointId") as String
         val userId = intent.getStringExtra("userId") as String
         Log.d("ReviewActivity", "pointId:$pointId, userId:$userId")
+        initialization(pointId)
+
+
+
         service.tryGetSpecificPoint(pointId)
-        service.tryGetUser("2646841646")    //userId 넣기!!
+        service.tryGetUser(userId)    //userId 넣기!!
 
 
         binding.reviewBtnLike.setOnCheckedChangeListener { buttonView, isChecked ->
-            when (isChecked) {
-                true -> {
-                }
-                false -> {
-                }
+            if(isChecked) {
+                service.tryPostLike(userId, pointId)
+                editPref.putBoolean(pointId, true)
+                editPref.apply() // SharedPreferences 적용
+            } else {
+                service.tryDeleteLike(userId, pointId)
+                editPref.remove(pointId)
+                editPref.apply() // SharedPreferences 적용
             }
+
         }
 
         // RecyclerView.Adapter<ViewHolder>()
@@ -69,6 +73,19 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>(ActivityReviewBinding
 
     }
 
+    private fun initialization(pointId:String) {
+        sharedPref = ApplicationClass.sSharedPreferences
+        editPref = sharedPref.edit()
+        val stringPref = sharedPref.getBoolean(pointId, false)
+
+        // SharedPreferences 데이터가 있으면 String을 ArrayList로 변환
+        // fromJson → json 형태의 문자열을 명시한 객체로 변환(두번째 인자)
+        if (stringPref) {
+            binding.reviewBtnLike.isChecked = true
+        }
+    }
+
+    /********************API RELATED CODES**********************/
     override fun onGetUserSuccess(response: UserResponse) {
         val data = response.result
         if(response.isSuccess) {
@@ -87,7 +104,6 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>(ActivityReviewBinding
 
                     Handler(Looper.getMainLooper()).post {
                         binding.reviewIvProfileImg.setImageBitmap(bmp)
-                        binding.reviewIvProfileImg.clipToOutline = true
                         binding.reviewIvProfileImg.scaleType = ImageView.ScaleType.CENTER_CROP
                     }
                 } catch (e: java.lang.Exception) {
@@ -101,10 +117,6 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>(ActivityReviewBinding
         }
     }
 
-    override fun onGetUserFailure(message: String) {
-        Log.e("ReviewActivity API getUser failure", "$message")
-    }
-
     @SuppressLint("NotifyDataSetChanged")
     override fun onGetSpecificPointSuccess(response: PointResponse) {
         super.onGetSpecificPointSuccess(response)
@@ -114,7 +126,7 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>(ActivityReviewBinding
             Log.d("ReviewActivity API getReview success", "NOT NULL")
             binding.reviewTvLike.text = data.likes.toString()
             binding.reviewTvLocation.text = data.location!!.replace("\"", "")
-            binding.reviewTvDate.text = data.point_date!!.replace("\"", "").subSequence(0,10)
+            binding.reviewTvDate.text = data.point_date!!.replace("\"", "")
             binding.reviewTvTag1.text = data.point_type!!.replace("\"", "")
             binding.reviewTvTag2.text = data.creature!!.replace("\"", "")
             binding.reviewTvTitle.text = data.title!!.replace("\"", "")
@@ -136,5 +148,10 @@ class ReviewActivity : BaseActivity<ActivityReviewBinding>(ActivityReviewBinding
             else
                 Log.w("ReviewActivity API getReview success", "NOT NULL, NOT SUCCESSFUL")
         }
+    }
+
+    override fun onGetSpecificPointFailure(message: String) {
+        super.onGetSpecificPointFailure(message)
+        binding.reviewIvProfileImg.setImageResource(R.drawable.user_icon_default)
     }
 }

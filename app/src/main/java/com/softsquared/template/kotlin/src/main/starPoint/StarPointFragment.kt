@@ -12,8 +12,7 @@ import com.softsquared.template.kotlin.databinding.FragmentStarPointBinding
 import com.softsquared.template.kotlin.src.main.search.model.StarPointItem
 import com.softsquared.template.kotlin.src.retrofit.RetrofitClassInterface
 import com.softsquared.template.kotlin.src.retrofit.RetrofitService
-import com.softsquared.template.kotlin.src.retrofit.model.PointResponse
-import com.softsquared.template.kotlin.src.retrofit.model.UserResponse
+import com.softsquared.template.kotlin.src.retrofit.response.PointResponse
 
 class StarPointFragment :
     BaseFragment<FragmentStarPointBinding>(FragmentStarPointBinding::bind, R.layout.fragment_star_point), RetrofitClassInterface {
@@ -63,7 +62,7 @@ class StarPointFragment :
                 reviewItems.apply{
                     this.add(
                         StarPointItem(review.user_id,review.point_id, review.title, review.point_image_list, review.nickname,
-                            profile, review.point_date, review.content, review.likes, review.location)
+                            review.user_img_url, review.point_date, review.content, review.likes, review.location)
                     )
                 }
             }

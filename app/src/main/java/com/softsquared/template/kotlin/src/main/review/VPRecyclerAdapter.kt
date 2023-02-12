@@ -57,4 +57,8 @@ class VPRecyclerAdapter(
     }
 
     override fun getItemCount(): Int = images.size
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
 }

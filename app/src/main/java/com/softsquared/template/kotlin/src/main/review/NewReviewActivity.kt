@@ -11,12 +11,15 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.icu.util.Calendar
+import android.net.Uri
 import android.net.http.SslError
+import android.os.Build
 import android.os.Bundle
 import android.os.Message
 import android.provider.MediaStore
@@ -57,7 +60,7 @@ class NewReviewActivity : BaseActivity<ActivityNewReviewBinding>(ActivityNewRevi
         if(result.resultCode == RESULT_OK){
             val imageUri = result.data?.data
             imageUri?.let{
-                imageFiles.add(File(ApplicationClass().getRealPathFromURI(it, this)))
+                imageFiles.add(File(getRealPathFromURI(it, this)))
                 Log.d("CHECK PHOTO TYPE", "URI: ${imageUri.toString()}")
                 Log.d("CHECK PHOTO TYPE", "String: ${ApplicationClass().getRealPathFromURI(it, this).toString()}")
                 Log.d("CHECK PHOTO TYPE", "FILE: ${File(ApplicationClass().getRealPathFromURI(it, this)).toString()}")
@@ -226,6 +229,23 @@ class NewReviewActivity : BaseActivity<ActivityNewReviewBinding>(ActivityNewRevi
         intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
         imageResult.launch(intent)
     }
+
+    private fun getRealPathFromURI(uri: Uri, context: Context):String {
+        val buildName = Build.MANUFACTURER
+        if(buildName.equals("Xiaomi")){
+            return uri.path!!
+        }
+        var columnIndex = 0
+        val proj = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor = context.contentResolver.query(uri, proj, null, null, null)
+        if(cursor!!.moveToFirst()){
+            columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        }
+        val result = cursor.getString(columnIndex)
+        cursor.close()
+        return result
+    }
+
     private fun showPermissionContextPopup() {
         AlertDialog.Builder(this)
             .setTitle("권한이 필요합니다.")

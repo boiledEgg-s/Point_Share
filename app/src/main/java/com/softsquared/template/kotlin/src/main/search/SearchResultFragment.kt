@@ -9,11 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.softsquared.template.kotlin.R
 import com.softsquared.template.kotlin.config.BaseFragment
 import com.softsquared.template.kotlin.databinding.FragmentSearchResultBinding
-import com.softsquared.template.kotlin.src.main.MainActivity
 import com.softsquared.template.kotlin.src.retrofit.RetrofitClassInterface
 import com.softsquared.template.kotlin.src.retrofit.RetrofitService
 import com.softsquared.template.kotlin.src.retrofit.model.GetPointDTO
-import com.softsquared.template.kotlin.src.retrofit.model.PointResponse
+import com.softsquared.template.kotlin.src.retrofit.response.PointResponse
 
 class SearchResultFragment :
     BaseFragment<FragmentSearchResultBinding>(FragmentSearchResultBinding::bind, R.layout.fragment_search_result), RetrofitClassInterface{
@@ -50,6 +49,29 @@ class SearchResultFragment :
             (activity as SearchActivity).supportFragmentManager.popBackStackImmediate()
         }
 
+        binding.radioButton1.setOnCheckedChangeListener { buttonView, isChecked ->
+            when (isChecked) {
+                true -> {
+                    pageId = 1
+                    reviewItems.clear()
+                    service.tryGetPoints(searchStr, "추천순", pageId.toString())
+                }
+                false -> {}
+            }
+        }
+
+        binding.radioButton2.setOnCheckedChangeListener { buttonView, isChecked ->
+            when (isChecked) {
+                true -> {
+                    pageId = 1
+                    reviewItems.clear()
+                    service.tryGetPoints(searchStr, "최신순", pageId.toString())
+                }
+                false -> {
+                }
+            }
+        }
+
         //페이지의 끝에 도달한 경우
         binding.searchResultRv.addOnScrollListener(object: RecyclerView.OnScrollListener(){
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -61,7 +83,7 @@ class SearchResultFragment :
                 if (lastVisibleItemPosition + 1 >= reviewItems.size) {
                     //리스트 마지막(바닥) 도착!!!!! 다음 페이지 데이터 로드!!
                     Log.d("from recycler view", "reached end")
-                    service.tryGetPoints(searchStr, order, (pageId++).toString())
+                    service.tryGetPoints(searchStr, order, (++pageId).toString())
                 }
             }
         })
@@ -82,9 +104,9 @@ class SearchResultFragment :
             for(review in responseData){
                 reviewItems.apply{
                     this.add(
-                        GetPointDTO(review.user_id, review.point_id, review.title, review.point_image_list, review.nickname,
+                        GetPointDTO(review.user_id, review.point_id, review.title, review.nickname,
                         review.point_type, review.creature, review.point_date, review.content, review.likes,
-                        review.location, review.latitude, review.longitude)
+                        review.location, review.user_img_url, review.point_image_list, review.latitude, review.longitude)
                 )}
             }
             binding.searchResultRv.adapter?.notifyDataSetChanged()

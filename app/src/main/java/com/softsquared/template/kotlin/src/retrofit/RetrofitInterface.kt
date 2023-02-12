@@ -1,7 +1,7 @@
 package com.softsquared.template.kotlin.src.retrofit
 /*
 7. 유저 조회
-8. 유저 정보 조회
+8. 유저 정보 수정
 11. 특정 포인트에 좋아요 표시
 12. 특정 포인트에 좋아요 취소
 14. 모든 포인트 조회
@@ -15,7 +15,9 @@ package com.softsquared.template.kotlin.src.retrofit
 
 
 import com.softsquared.template.kotlin.config.ApplicationClass
-import com.softsquared.template.kotlin.src.retrofit.model.*
+import com.softsquared.template.kotlin.config.BaseResponse
+import com.softsquared.template.kotlin.src.retrofit.model.GetUserPointDTO
+import com.softsquared.template.kotlin.src.retrofit.response.*
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -28,25 +30,26 @@ interface RetrofitInterface {
         @Path("userId") userId: String
     ) : Call<UserResponse>
 
-    //8. 유저 정보 조회
+    //8. 유저 정보 수정
+    @Multipart
     @PUT("app/users/{userId}")
     fun putUserInfo(
         @Path("userId") userId: String?=ApplicationClass.user_id,
-        @Part images: MultipartBody.Part
-    ) : Call<UserResponse>
+        @Part image: MultipartBody.Part
+    ) : Call<PutUserResponse>
 
     //11. 특정 포인트에 좋아요 표시
     @POST("app/users/{userId}/likes/{pointId}")
     fun postLike(
         @Path("userId") userId: String?=ApplicationClass.user_id,
         @Path("pointId") pointId: String
-    )
+    ):Call<BaseResponse>
     //12. 특정 포인트에 좋아요 취소
     @DELETE("app/users/{userId}/likes/{pointId}")
     fun deleteLike(
         @Path("userId") userId: String?=ApplicationClass.user_id,
         @Path("pointId") pointId: String
-    )
+    ):Call<BaseResponse>
 
     //14. 모든 포인트 조회 + 페이징 처리
     @GET("app/points")
@@ -77,15 +80,15 @@ interface RetrofitInterface {
     ) : Call<PointResponse>
 
     //19. 유저의 포인트 조회
-    @GET("users/{userId}/points")
+    @GET("app/users/{userId}/points")
     fun getUserPoints(
         @Path("userId") userId:String ?= ApplicationClass.user_id
-    )
+    ): Call<UserPointResponse>
 
     //20. 유저가 좋아요한 포인트 조회
-    @GET("users/{userId}/likes")
+    @GET("app/users/{userId}/likes")
     fun getUserLikes(
         @Path("userId") userId:String ?= ApplicationClass.user_id,
-        @Query("pageId") pageId: String? = "0"
-    )
+        @Query("pageId") pageId: String?="1"
+    ): Call<UserLikeResponse>
 }

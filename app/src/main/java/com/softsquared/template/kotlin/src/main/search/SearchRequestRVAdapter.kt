@@ -37,5 +37,7 @@ class SearchRequestRVAdapter(
 
     override fun getItemCount(): Int = dataList.size
 
-
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
 }
