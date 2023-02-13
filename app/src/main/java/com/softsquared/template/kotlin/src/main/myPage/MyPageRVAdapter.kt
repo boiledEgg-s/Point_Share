@@ -44,8 +44,6 @@ class MyPageRVAdapter(
                     }
                     return@Thread
                 }.start()
-            } else{
-                binding.background.setBackgroundColor(ActivityCompat.getColor(context, R.color.lightgrey))
             }
             binding.myPageReviewTv1.text = data.title
             binding.myPageReviewTv2.text = data.point_date

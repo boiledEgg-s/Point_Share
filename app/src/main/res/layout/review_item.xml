@@ -25,6 +25,8 @@
                 android:background="@drawable/map_location_button_bg"
                 android:backgroundTint="@color/main_skyblue"
                 android:src="@drawable/user_icon_default"
+                android:clipToOutline="true"
+                android:scaleType="centerCrop"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -63,6 +65,7 @@
                 android:layout_marginTop="8dp"
                 android:background="@drawable/review_item_img_bg"
                 android:scaleType="centerCrop"
+                android:clipToOutline="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/item_tv_content" />

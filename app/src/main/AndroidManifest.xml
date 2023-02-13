@@ -44,6 +44,22 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".src.main.review.UpdateReviewActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+        android:name=".src.main.review.ReviewUpdatedActivity"
+        android:exported="false"
+        android:theme="@style/AppTheme.NoActionBar">
+        <meta-data
+            android:name="android.app.lib_name"
+            android:value="" />
+    </activity>
+        <activity
             android:name=".src.main.review.ReviewActivity"
             android:exported="false"
             android:theme="@style/AppTheme.NoActionBar">
@@ -84,11 +100,8 @@
         <activity
             android:name=".src.main.login.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:exported="true">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN"/>-->
-<!--                <category android:name="android.intent.category.LAUNCHER"/>-->
-<!--            </intent-filter>-->
+            android:exported="false"
+            android:screenOrientation="portrait">
         </activity>
 
         <activity
@@ -104,6 +117,43 @@
                     android:scheme="kakao04d86cfd9ae3ae89174db5224a3c6132" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".src.main.login.CompleteLogin"
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <activity
+            android:name=".src.main.login.CompleteRegister"
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <activity
+            android:name=".src.main.login.RegisterLogin"
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <activity
+            android:name=".src.main.login.TermOfUse"
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
     </application>
 
 </manifest>

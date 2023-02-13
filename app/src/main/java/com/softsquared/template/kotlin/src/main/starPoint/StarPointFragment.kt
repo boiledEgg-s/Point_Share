@@ -20,11 +20,9 @@ class StarPointFragment :
     private var reviewItems:ArrayList<StarPointItem> = arrayListOf()
     private val service = RetrofitService(this)
     private var pageId = 1
-    private var profile = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         val reviewRVAdapter = StarPointRVAdapter(reviewItems)
         reviewRVAdapter.notifyItemInserted(reviewItems.size)
@@ -32,8 +30,13 @@ class StarPointFragment :
         binding.starReviewRv.layoutManager =
             LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
 
-        service.tryGetPoints(null, null, pageId.toString())
 
+    }
+
+    override fun onResume() {
+        Log.w("========StarPoint", " onResume=========")
+        reviewItems.clear()
+        service.tryGetPoints(null, "추천순", pageId.toString())
         binding.starReviewRv.addOnScrollListener(object: RecyclerView.OnScrollListener(){
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -44,11 +47,12 @@ class StarPointFragment :
                 if (lastVisibleItemPosition + 1 >= reviewItems.size) {
                     //리스트 마지막(바닥) 도착!!!!! 다음 페이지 데이터 로드!!
                     Log.d("from recycler view", "reached end")
-                    service.tryGetPoints(null, null, (pageId++).toString())
-
+                    service.tryGetPoints(null, "추천순", (++pageId).toString())
                 }
             }
         })
+
+        super.onResume()
     }
 
     @SuppressLint("NotifyDataSetChanged")

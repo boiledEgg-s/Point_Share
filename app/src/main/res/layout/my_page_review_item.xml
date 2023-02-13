@@ -23,6 +23,7 @@
             android:id="@+id/background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/myPage_review_color"
             android:gravity="center"
             android:orientation="vertical">
             <TextView
@@ -31,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:text="TITLE"
-                android:textColor="@color/white"
+                android:textColor="@color/shadow"
                 android:fontFamily="@font/sf_compat_regular"
                 android:textStyle="bold"
                 android:textSize="16sp"
@@ -45,7 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="작성 날짜"
-                android:textColor="@color/white"
+                android:textColor="@color/shadow"
                 android:fontFamily="@font/sf_compat_regular"
                 android:textSize="14sp"
                 app:layout_constraintTop_toBottomOf="@id/my_page_review_tv1"

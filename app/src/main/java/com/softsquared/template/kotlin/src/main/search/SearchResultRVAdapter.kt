@@ -23,24 +23,27 @@ class SearchResultRVAdapter(
     inner class ItemViewHolder(val binding: ReviewItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: GetPointDTO) {
+            Log.w("~~~~~~~~~~~~~~~~~~~~~~~~~~~~StarPoint INSIDE THREAD", "${data.point_image_list}")
             Thread() {
-                try {
+                if(data.point_image_list != null) {
                     val img_url = URL(data.point_image_list!!.split(",")[0])
-                    val profile_url = URL(data.user_img_url)
                     val img_stream = img_url.openStream()
-                    val profile_stream = profile_url.openStream()
                     val img_bmp = BitmapFactory.decodeStream(img_stream)
-                    val profile_bmp = BitmapFactory.decodeStream(profile_stream)
 
-                    Log.d("StarPoint INSIDE THREAD", "GETTING img ${img_stream}")
-                    Log.d("StarPoint INSIDE THREAD", "GETTING profile $profile_stream")
+                    Log.w("~~~~~~~~~~~~~~~~~~~~~~~~~~~~StarPoint INSIDE THREAD", "GETTING img ${img_stream}")
+                    Handler(Looper.getMainLooper()).post {
+                        binding.itemIvImage.setImageBitmap(img_bmp)
+                    }
+                }
+                if(data.user_img_url != null) {
+                    val profile_url = URL(data.user_img_url)
+                    val profile_stream = profile_url.openStream()
+                    val profile_bmp = BitmapFactory.decodeStream(profile_stream)
+                    Log.w("StarPoint INSIDE THREAD", "GETTING profile $profile_stream")
 
                     Handler(Looper.getMainLooper()).post {
                         binding.itemIvProfile.setImageBitmap(profile_bmp)
-                        binding.itemIvImage.setImageBitmap(img_bmp)
                     }
-                } catch (e: java.lang.Exception) {
-                    e.printStackTrace()
                 }
                 return@Thread
             }.start()
@@ -53,30 +56,6 @@ class SearchResultRVAdapter(
             binding.itemTvLocation.text = data.location!!.replace("\"", "")
             binding.itemTvTime.text = data.point_date!!.replace("\"", "")
 
-
-//            var bmp: Bitmap?
-//            Thread() {
-//                try{
-//                    val url = URL(photo)
-//                    val stream = url.openStream()
-//
-//                    bmp = BitmapFactory.decodeStream(stream)
-//
-//                    Log.d("INSIDE THREAD", "GETTING PHOTO $photo")
-//                    Log.d("INSIDE THREAD", "GETTING URL $url")
-//                    Log.d("INSIDE THREAD", "GETTING BMP $bmp")
-//                    Log.d("INSIDE THREAD", "GETTING STREAM $stream")
-//
-//                    Handler(Looper.getMainLooper()).post{
-//                        binding.reviewVpImg.setImageBitmap(bmp)
-//                        binding.reviewVpImg.clipToOutline = true
-//                    }
-//
-//                } catch (e: java.lang.Exception){
-//                    e.printStackTrace()
-//                }
-//                return@Thread
-//            }.start()
         }
     }
 

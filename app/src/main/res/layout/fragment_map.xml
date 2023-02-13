@@ -8,8 +8,12 @@
     app:layout_constraintHorizontal_chainStyle="spread"
     app:layout_constraintVertical_chainStyle="spread">
 
-    <net.daum.mf.map.api.MapView
+<!--    <net.daum.mf.map.api.MapView
         android:id="@+id/map_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/map_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

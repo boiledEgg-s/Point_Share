@@ -16,6 +16,9 @@ class SearchRequestFragment :
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    override fun onResume() {
         searchRVAdapter = SearchRequestRVAdapter((activity as SearchActivity).searchArr,
             onClickDelete = { deleteSearchString(it)},
             onClickBtn = { sendSearchString(it) })
@@ -33,6 +36,7 @@ class SearchRequestFragment :
         (activity as SearchActivity).binding.mapIvBack.setOnClickListener{
             (activity as SearchActivity).finish()
         }
+        super.onResume()
     }
 
 

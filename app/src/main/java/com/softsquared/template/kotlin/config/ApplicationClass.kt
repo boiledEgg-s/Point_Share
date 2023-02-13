@@ -52,7 +52,7 @@ class ApplicationClass : Application() {
         const val PARAM_KEY_RATING = "rating"
 
         //임시 유저 아이디
-        val user_id = "c0997af2-96ff-11ed-931f-069e6ea2831c"
+        val user_id = "d0ddc294-97d8-11ed-931f-069e6ea2831c"
     }
 
     // 앱이 처음 생성되는 순간, SP를 새로 만들어주고, 레트로핏 인스턴스를 생성합니다.

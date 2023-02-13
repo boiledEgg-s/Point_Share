@@ -7,8 +7,8 @@ package com.softsquared.template.kotlin.src.retrofit
 14. 모든 포인트 조회
 15. 특정 포인트 조회
 16. 포인트 등록
-
-
+17. 특정 포인트 수정
+18. 특정 포인트 삭제
 19. 유저의 포인트 조회
 20. 유저가 좋아요한 포인트 조회
  */
@@ -18,6 +18,15 @@ import com.softsquared.template.kotlin.config.BaseResponse
 import com.softsquared.template.kotlin.src.retrofit.response.*
 
 interface RetrofitClassInterface{
+
+    //6. 유저 닉네임 중복 조회
+    fun onGetNameCheckSuccess(response: NameCheckResponse){
+        val message = response.message
+        Log.w("RETROFIT SUCCESS","onGetNameCheckSuccess, $message")
+    }
+    fun onGetNameCheckFailure(message: String){
+        Log.w("RETROFIT FAILURE","onGetNameCheckFailure, $message")
+    }
 
     //7. 유저 조회
     fun onGetUserSuccess(response: UserResponse){
@@ -82,6 +91,25 @@ interface RetrofitClassInterface{
         Log.w("RETROFIT FAILURE","onPostPointFailure, $message")
     }
 
+    //17. 특정 포인트 수정
+    fun onPutPointSuccess(message: String){
+        Log.w("RETROFIT SUCCESS","onPutPointSuccess, $message")
+    }
+
+    fun onPutPointFailure(message: String){
+        Log.w("RETROFIT FAILURE","onPutPointFailure, $message")
+    }
+
+    //18. 특정 포인트 삭제
+    fun onDeletePointSuccess(response: UpdatePointResponse){
+        val message = response.message
+        Log.w("RETROFIT SUCCESS","onGetSpecificPointSuccess, $message")
+    }
+
+    fun onDeletePointFailure(message: String){
+        Log.w("RETROFIT FAILURE","onDeletePointFailure, $message")
+    }
+
     //19. 유저 작성 포인트 조회
     fun onGetUserPointSuccess(response: UserPointResponse){
         val message = response.message
@@ -98,5 +126,14 @@ interface RetrofitClassInterface{
     }
     fun onGetUserLikeFailure(message: String){
         Log.w("RETROFIT FAILURE","onGetUserLikeFailure, $message")
+    }
+
+    //21. 특정 위치의 포인트 정보 조회 : 제목, 어종, 해루질 종류, 좋아요 수
+    fun onGetMapMarkSuccess(response: GetMarkResponse){
+        val message = response.message
+        Log.w("RETROFIT SUCCESS","onGetMapMarkSuccess, $message")
+    }
+    fun onGetMapMarkFailure(message: String){
+        Log.w("RETROFIT FAILURE","onGetMapMarkFailure, $message")
     }
 }

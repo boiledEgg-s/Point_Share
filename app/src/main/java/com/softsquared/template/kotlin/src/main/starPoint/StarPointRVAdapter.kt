@@ -22,23 +22,28 @@ class StarPointRVAdapter(
     lateinit var binding: ReviewItemBinding
     inner class ItemViewHolder(val binding:ReviewItemBinding):RecyclerView.ViewHolder(binding.root){
         fun bind(data: StarPointItem){
+
             Thread() {
                 try {
-                    val img_url = URL(data.point_image!!.split(",")[0])
-                    val profile_url = URL(data.profile_image)
-                    val img_stream = img_url.openStream()
-                    val profile_stream = profile_url.openStream()
-                    val img_bmp = BitmapFactory.decodeStream(img_stream)
-                    val profile_bmp = BitmapFactory.decodeStream(profile_stream)
+                    if(data.point_image != null) {
+                        val img_url = URL(data.point_image!!.split(",")[0])
+                        val img_stream = img_url.openStream()
+                        val img_bmp = BitmapFactory.decodeStream(img_stream)
 
-                    Log.d("StarPoint INSIDE THREAD", "GETTING img ${img_stream}")
-                    Log.d("StarPoint INSIDE THREAD", "GETTING profile $profile_stream")
+                        Log.d("StarPoint INSIDE THREAD", "GETTING img ${img_stream}")
+                        Handler(Looper.getMainLooper()).post {
+                            binding.itemIvImage.setImageBitmap(img_bmp)
+                        }
+                    }
+                    if(data.profile_image != null) {
+                        val profile_url = URL(data.profile_image)
+                        val profile_stream = profile_url.openStream()
+                        val profile_bmp = BitmapFactory.decodeStream(profile_stream)
+                        Log.d("StarPoint INSIDE THREAD", "GETTING profile $profile_stream")
 
-                    Handler(Looper.getMainLooper()).post {
-                        binding.itemIvProfile.setImageBitmap(profile_bmp)
-                        binding.itemIvProfile.scaleType = ImageView.ScaleType.CENTER_CROP
-                        binding.itemIvImage.setImageBitmap(img_bmp)
-                        binding.itemIvImage.clipToOutline = true
+                        Handler(Looper.getMainLooper()).post {
+                            binding.itemIvProfile.setImageBitmap(profile_bmp)
+                        }
                     }
                 } catch (e: java.lang.Exception) {
                     e.printStackTrace()
@@ -53,30 +58,6 @@ class StarPointRVAdapter(
             binding.itemTvLike.text = "좋아요 "+data.likes.toString()+"개"
             binding.itemTvLocation.text = data.location!!.replace("\"", "")
             binding.itemTvTime.text = data.point_date!!.replace("\"", "")
-
-
-            var imageBmp: Bitmap?
-            var profileBmp: Bitmap?
-            Thread() {
-                try{
-                    val imageUrl = URL(data.point_image)
-                    val profileUrl = URL(data.profile_image)
-                    val imgStream = imageUrl.openStream()
-                    val profileStream = profileUrl.openStream()
-
-                    imageBmp = BitmapFactory.decodeStream(imgStream)
-                    profileBmp = BitmapFactory.decodeStream(profileStream)
-
-                    Handler(Looper.getMainLooper()).post{
-                        binding.itemIvProfile.setImageBitmap(profileBmp)
-                        binding.itemIvImage.setImageBitmap(imageBmp)
-                    }
-
-                } catch (e: java.lang.Exception){
-                    e.printStackTrace()
-                }
-                return@Thread
-            }.start()
 
         }
     }

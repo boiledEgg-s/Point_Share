@@ -8,6 +8,7 @@ import android.os.Message
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.softsquared.template.kotlin.databinding.ReviewVpItemBinding
 import okhttp3.internal.wait
@@ -35,7 +36,7 @@ class VPRecyclerAdapter(
 
                     Handler(Looper.getMainLooper()).post{
                         binding.reviewVpImg.setImageBitmap(bmp)
-                        binding.reviewVpImg.clipToOutline = true
+                        binding.reviewVpImg.scaleType = ImageView.ScaleType.CENTER_CROP
                     }
 
                 } catch (e: java.lang.Exception){

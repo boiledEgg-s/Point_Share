@@ -7,8 +7,8 @@ package com.softsquared.template.kotlin.src.retrofit
 14. 모든 포인트 조회
 15. 특정 포인트 조회
 16. 포인트 등록
-
-
+17. 특정 포인트 수정
+18. 특정 포인트 삭제
 19. 유저의 포인트 조회
 20. 유저가 좋아요한 포인트 조회
  */
@@ -17,6 +17,7 @@ package com.softsquared.template.kotlin.src.retrofit
 import android.util.Log
 import com.softsquared.template.kotlin.config.ApplicationClass
 import com.softsquared.template.kotlin.config.BaseResponse
+import com.softsquared.template.kotlin.src.main.review.model.PutReviewItem
 import com.softsquared.template.kotlin.src.retrofit.model.*
 import com.softsquared.template.kotlin.src.retrofit.response.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -29,6 +30,22 @@ import java.io.File
 
 class RetrofitService(val retrofitClass: RetrofitClassInterface) {
     val service = ApplicationClass.sRetrofit.create(RetrofitInterface::class.java)
+
+    //7. 유저 조회
+    fun tryCheckName(nickname: String) {
+        service.getNameCheck(nickname).enqueue(object : Callback<NameCheckResponse> {
+            override fun onResponse(
+                call: Call<NameCheckResponse>,
+                response: Response<NameCheckResponse>
+            ) {
+                retrofitClass.onGetNameCheckSuccess(response.body() as NameCheckResponse)
+            }
+
+            override fun onFailure(call: Call<NameCheckResponse>, t: Throwable) {
+                retrofitClass.onGetNameCheckFailure(t.message ?: "중복 아님")
+            }
+        })
+    }
 
     //7. 유저 조회
     fun tryGetUser(userId: String) {
@@ -48,13 +65,13 @@ class RetrofitService(val retrofitClass: RetrofitClassInterface) {
 
     //8. 유저 정보 수정
     fun tryPutUser(userId: String, img: File) {
-        var fileToUpload = arrayListOf<MultipartBody.Part>()
+
         val fileName = "profile_" + userId + ".png"
-        var requestBody = img.asRequestBody("image/jpeg".toMediaTypeOrNull())
-        fileToUpload.add(MultipartBody.Part.createFormData("images", fileName, requestBody))
+        val requestBody = img.asRequestBody("image/jpeg".toMediaTypeOrNull())
+        val fileToUpload = MultipartBody.Part.createFormData("image", fileName, requestBody)
         //val fileToUpload = MultipartBody.Part.createFormData("images", fileName, requestBody)
 
-        service.putUserInfo(userId, fileToUpload[0]).enqueue(object : Callback<PutUserResponse> {
+        service.putUserInfo(userId, fileToUpload).enqueue(object : Callback<PutUserResponse> {
             override fun onResponse(
                 call: Call<PutUserResponse>,
                 response: Response<PutUserResponse>
@@ -154,6 +171,46 @@ class RetrofitService(val retrofitClass: RetrofitClassInterface) {
         })
     }
 
+    //17. 특정 포인트 수정
+    fun tryPutPoints(pointId: String,request:PostPointDTO){
+        var fileToUpload = arrayListOf<MultipartBody.Part>()
+        for (img in request.images) {
+            var fileName =
+                "testingFromAndroid" + System.nanoTime().toString().subSequence(0, 5) + ".png"
+            var requestBody = img.asRequestBody("image/jpeg".toMediaTypeOrNull())
+            fileToUpload.add(MultipartBody.Part.createFormData("images", fileName, requestBody))
+        }
+
+        Log.d(
+            "REVIEW_SERVICE > postReview",
+            "${request.title}, ${request.content}, ${request.point_date}"
+        )
+
+        service.updatePoint(
+            pointId, request.title, request.content, request.point_Type,
+            request.location, request.creature, request.point_date, fileToUpload)
+            .enqueue(object : Callback<UpdatePointResponse> {
+            override fun onResponse(call: Call<UpdatePointResponse>, response: Response<UpdatePointResponse>) {
+                retrofitClass.onDeleteLikeSuccess(response.body() as UpdatePointResponse)
+            }
+            override fun onFailure(call: Call<UpdatePointResponse>, t: Throwable) {
+                retrofitClass.onDeleteLikeFailure(t.message ?: "통신 오류")
+            }
+        })
+    }
+
+    //18. 특정 포인트 삭제
+    fun tryDeletePoints(pointId:String){
+        service.deletePoint(pointId).enqueue(object : Callback<UpdatePointResponse> {
+            override fun onResponse(call: Call<UpdatePointResponse>, response: Response<UpdatePointResponse>) {
+                retrofitClass.onDeletePointSuccess(response.body() as UpdatePointResponse)
+            }
+            override fun onFailure(call: Call<UpdatePointResponse>, t: Throwable) {
+                retrofitClass.onDeletePointFailure(t.message ?: "통신 오류")
+            }
+        })
+    }
+
     //19. 유저의 포인트 조회
     fun tryGetUserPoints(userId: String) {
         service.getUserPoints(userId).enqueue(object : Callback<UserPointResponse> {
@@ -176,6 +233,19 @@ class RetrofitService(val retrofitClass: RetrofitClassInterface) {
 
             override fun onFailure(call: Call<UserLikeResponse>, t: Throwable) {
                 retrofitClass.onGetUserLikeFailure(t.message ?: "통신 오류")
+            }
+        })
+    }
+
+    //21. 특정 위치의 포인트 정보 조회 : 제목, 어종, 해루질 종류, 좋아요 수
+    fun tryGetMapMark(latitude:Double, longitude:Double){
+        service.getMapMark(latitude, longitude).enqueue(object : Callback<GetMarkResponse> {
+            override fun onResponse(call: Call<GetMarkResponse>, response: Response<GetMarkResponse>) {
+                retrofitClass.onGetMapMarkSuccess(response.body() as GetMarkResponse)
+            }
+
+            override fun onFailure(call: Call<GetMarkResponse>, t: Throwable) {
+                retrofitClass.onGetMapMarkFailure(t.message ?: "통신 오류")
             }
         })
     }

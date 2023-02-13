@@ -39,15 +39,18 @@ class SearchResultFragment :
         searchStr = (activity as SearchActivity).binding.mapEtSearch.text.toString()
         (activity as SearchActivity).binding.mapEtSearch.isCursorVisible = false
 
-        //레트로핏 관련 서비스 객체 생성
-        service.tryGetPoints(searchStr, null, pageId.toString())
-
-
-
-        //
         (activity as SearchActivity).binding.mapIvBack.setOnClickListener{
             (activity as SearchActivity).supportFragmentManager.popBackStackImmediate()
         }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+    //레트로핏 관련 서비스 객체 생성
+        reviewItems.clear()
+        pageId = 1
+        service.tryGetPoints(searchStr, order, pageId.toString())
 
         binding.radioButton1.setOnCheckedChangeListener { buttonView, isChecked ->
             when (isChecked) {
@@ -71,7 +74,6 @@ class SearchResultFragment :
                 }
             }
         }
-
         //페이지의 끝에 도달한 경우
         binding.searchResultRv.addOnScrollListener(object: RecyclerView.OnScrollListener(){
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -87,7 +89,6 @@ class SearchResultFragment :
                 }
             }
         })
-
     }
 
 

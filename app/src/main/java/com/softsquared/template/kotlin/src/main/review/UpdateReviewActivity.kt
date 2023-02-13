@@ -15,13 +15,13 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.icu.util.Calendar
 import android.net.Uri
 import android.net.http.SslError
-import android.os.Build
-import android.os.Bundle
-import android.os.Message
+import android.os.*
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
@@ -40,21 +40,28 @@ import com.softsquared.template.kotlin.config.ApplicationClass
 import com.softsquared.template.kotlin.config.BaseActivity
 import com.softsquared.template.kotlin.databinding.ActivityNewReviewBinding
 import com.softsquared.template.kotlin.src.main.review.model.PutReviewItem
+import com.softsquared.template.kotlin.src.retrofit.RetrofitClassInterface
+import com.softsquared.template.kotlin.src.retrofit.RetrofitService
 import com.softsquared.template.kotlin.src.retrofit.model.PostPointDTO
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.net.URI
+import java.net.URL
 
-class NewReviewActivity : BaseActivity<ActivityNewReviewBinding>(ActivityNewReviewBinding::inflate){
+class UpdateReviewActivity : BaseActivity<ActivityNewReviewBinding>(ActivityNewReviewBinding::inflate), RetrofitClassInterface{
 
+    private lateinit var item:PutReviewItem
     private var check = false
     private var photoArr:ArrayList<Drawable?> = arrayListOf()
     lateinit var photoRVAdapter:NewReviewPhotoAdapter
 
     private var imageFiles = arrayListOf<File>()
     private lateinit var postReviewRequest:PostPointDTO
+
+    private val service = RetrofitService(this)
 
     private val imageResult = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -76,14 +83,10 @@ class NewReviewActivity : BaseActivity<ActivityNewReviewBinding>(ActivityNewRevi
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding.reviewDeleteBtn.visibility = View.INVISIBLE
-
-
-
 
         //날짜
         val calendar = Calendar.getInstance()
@@ -91,10 +94,27 @@ class NewReviewActivity : BaseActivity<ActivityNewReviewBinding>(ActivityNewRevi
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
+        photoRVAdapter = NewReviewPhotoAdapter(photoArr,
+            onClickDelete = { deleteSearchString(it)})
+        photoRVAdapter.notifyDataSetChanged()
+        binding.newReviewRvPhoto.adapter = photoRVAdapter
+        binding.newReviewRvPhoto.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+
+        item = intent.getSerializableExtra("data", PutReviewItem::class.java) as PutReviewItem
+        initViews(item, this)
+
+
         //뒤로 가기 버튼
         binding.newReviewIvBack.setOnClickListener{
             finish()
         }
+
+        binding.reviewDeleteBtn.setOnClickListener{
+            service.tryDeletePoints(item.pointId!!)
+            setResult(9000)
+            finish()
+        }
+
 
         binding.newReviewIvCamera.setOnClickListener{
             val permissionCheck = ContextCompat.checkSelfPermission(this,
@@ -129,8 +149,9 @@ class NewReviewActivity : BaseActivity<ActivityNewReviewBinding>(ActivityNewRevi
                         binding.newReviewTvProduct.text.toString(),
                         binding.newReviewTvDate.text.toString(),
                         imageFiles)
-                    var intent = Intent(this, ReviewCreatedActivity::class.java)
+                    var intent = Intent(this, ReviewUpdatedActivity::class.java)
                     intent.putExtra("data", postReviewRequest)
+                    intent.putExtra("pointId", item.pointId)
                     startActivity(intent)
                     finish()
                 } else {
@@ -188,8 +209,47 @@ class NewReviewActivity : BaseActivity<ActivityNewReviewBinding>(ActivityNewRevi
                 checkEditTextFilled()
             }
         })
+
     }
 
+    private fun initViews(i:PutReviewItem, context:Context){
+        binding.newReviewBtnFinish.setText("포인트 수정하기")
+        binding.reviewDeleteBtn.visibility = View.VISIBLE
+        //Log.w("====Review update======", i.images!![0])
+        imageFiles.clear()
+        photoArr.clear()
+        if(i.images != null){
+            for(img in i.images!!) {
+                Thread() {
+                    try {
+                        val file = File(img)
+                        imageFiles.add(0, file)
+                        val img_url = URL(img)
+                        val img_stream = img_url.openStream()
+                        val img_bmp = BitmapFactory.decodeStream(img_stream)
+
+                        Log.d("StarPoint INSIDE THREAD", "GETTING img ${img_stream}")
+
+                        Handler(Looper.getMainLooper()).post {
+                            val drawable = BitmapDrawable(resources, img_bmp)
+                            photoArr.apply { this.add(0, drawable) }
+                            photoRVAdapter.notifyItemInserted(0)
+                        }
+                    } catch (e: java.lang.Exception) {
+                        e.printStackTrace()
+                    }
+                    return@Thread
+                }.start()
+            }
+        }
+        binding.newReviewTvTitle.setText(i.title)
+        binding.newReviewTvDate.setText(i.point_date)
+        binding.newReviewTvType.setText(i.point_Type)
+        binding.newReviewTvProduct.setText(i.creature)
+        binding.newReviewTvLocation.setText(i.location)
+        binding.newReviewTvContent.setText(i.content)
+        checkEditTextFilled()
+    }
 
 
     fun checkEditTextFilled(){
@@ -224,7 +284,9 @@ class NewReviewActivity : BaseActivity<ActivityNewReviewBinding>(ActivityNewRevi
 
     @SuppressLint("NotifyDataSetChanged")
     fun deleteSearchString(draw: Drawable?) {
+        val i = photoArr.indexOf(draw)
         photoArr.remove(draw)
+        imageFiles.removeAt(i)
         binding.newReviewRvPhoto.adapter?.notifyDataSetChanged()
     }
 
@@ -315,12 +377,12 @@ class NewReviewActivity : BaseActivity<ActivityNewReviewBinding>(ActivityNewRevi
 
         override fun onCreateWindow(view: WebView?, isDialog: Boolean, isUserGesture: Boolean, resultMsg: Message?): Boolean {
 
-            val newWebView = WebView(this@NewReviewActivity).apply{
+            val newWebView = WebView(this@UpdateReviewActivity).apply{
                 settings.javaScriptEnabled = true
             }
 
 
-            val dialog = Dialog(this@NewReviewActivity)
+            val dialog = Dialog(this@UpdateReviewActivity)
 
             dialog.setContentView(newWebView)
 
