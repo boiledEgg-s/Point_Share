@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/text_first"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="80dp"
+        android:fontFamily="@font/sf_compat_regular"
+        android:text="건강한 해루질 문화를 위해\n다음과 같은 사항들을 꼭\n지켜주세요!"
+        android:textColor="@color/deep_grey"
+        android:textSize="22sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_second"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginLeft="88dp"
+        android:layout_marginTop="44dp"
+        android:fontFamily="@font/sf_compat_regular"
+        android:text="안전을 최우선으로"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_first" />
+    <TextView
+        android:id="@+id/text_second_in"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginLeft="88dp"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/sf_compat_regular"
+        android:text="위험한 곳, 위험한 시간은 피해 주세요"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_second" />
+
+
+    <TextView
+        android:id="@+id/text_third"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginLeft="88dp"
+        android:layout_marginTop="18dp"
+        android:fontFamily="@font/sf_compat_regular"
+        android:text="필요한 만큼만"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_second_in" />
+    <TextView
+        android:id="@+id/text_third_with"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginLeft="88dp"
+        android:fontFamily="@font/sf_compat_regular"
+        android:text="자신이 필요한 만큼만 생물을 채집하고\n방생해 주세요"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_third" />
+
+
+    <TextView
+        android:id="@+id/text_fourth"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginLeft="88dp"
+        android:layout_marginTop="18dp"
+        android:fontFamily="@font/sf_compat_regular"
+        android:text="합법적으로"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_third_with" />
+    <TextView
+        android:id="@+id/text_fourth_with"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginLeft="88dp"
+        android:fontFamily="@font/sf_compat_regular"
+        android:text="불법 장비나 금지 지역, 금지 시간 등을\n숙지하고 피해주세요"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_fourth" />
+
+    <TextView
+        android:id="@+id/text_fifth"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginLeft="88dp"
+        android:layout_marginTop="18dp"
+        android:fontFamily="@font/sf_compat_regular"
+        android:text="확인은 꼼꼼히"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_fourth_with" />
+    <TextView
+        android:id="@+id/text_fifth_with"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginLeft="88dp"
+        android:fontFamily="@font/sf_compat_regular"
+        android:text="천연 기념물로 지정됐거나 금지 체장을\n넘지 않는지 확인 후 채집해 주세요"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_fifth" />
+
+    <TextView
+        android:id="@+id/text_sixth"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginLeft="88dp"
+        android:layout_marginTop="18dp"
+        android:fontFamily="@font/sf_compat_regular"
+        android:text="마무리까지"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_fifth_with" />
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginLeft="88dp"
+        android:fontFamily="@font/sf_compat_regular"
+        android:text="통발과 그물은 꼭 회수하시고 쓰레기를\n버리지 않도록 주의해 주세요"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_sixth" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="60dp"
+        android:background="@color/main_skyblue"
+        android:text="네, 당연하죠"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

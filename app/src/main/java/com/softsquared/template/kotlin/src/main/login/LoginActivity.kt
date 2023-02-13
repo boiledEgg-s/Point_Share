@@ -1,5 +1,6 @@
 package com.softsquared.template.kotlin.src.main.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import com.kakao.sdk.user.UserApiClient
@@ -15,19 +16,22 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setKakaoCallback()
+        // 카카오톡으로 로그인 정보 확인
+
 
         binding.kakaoLoginButton.setOnClickListener {
-
-            // 카카오톡으로 로그인
             UserApiClient.instance.loginWithKakaoTalk(this) { token, error ->
                 if (error != null) {
                     Log.e("TAG", "로그인 실패", error)
                 } else if (token != null) {
                     Log.i("TAG", "로그인 성공 ${token.accessToken}")
+                    startActivity(Intent(this, RegisterLogin::class.java))
+                    finish()
                 }
             }
-//        // 카카오톡이 설치되어 있으면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
+
+            setKakaoCallback()
+            // 카카오톡이 설치되어 있으면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
                 UserApiClient.instance.loginWithKakaoTalk(this) { token, error ->
                     if (error != null) {
@@ -43,6 +47,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
                         UserApiClient.instance.loginWithKakaoAccount(this, callback = kakaoCallback)
                     } else if (token != null) {
                         Log.i("TAG", "카카오톡으로 로그인 성공 ${token.accessToken}")
+                        startActivity(Intent(this, RegisterLogin::class.java))
+                        finish()
                     }
                 }
             } else {
@@ -85,15 +91,19 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
                 }
             } else if (token != null) {
                 Log.d("[카카오로그인]", "로그인에 성공하였습니다.\n${token.accessToken}")
-                UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-                    UserApiClient.instance.me { user, error ->
+                // tokenInfo , error _로 rename
+                UserApiClient.instance.accessTokenInfo { _, _ ->
+                    UserApiClient.instance.me { user, _ ->
                         binding.nickname.text = "닉네임: ${user?.kakaoAccount?.profile?.nickname}"
                     }
                 }
+                startActivity(Intent(this, RegisterLogin::class.java))
+                finish()
             } else {
                 Log.d("카카오로그인", "토큰==null error==null")
             }
         }
+
     }
 }
 //            //로그아웃

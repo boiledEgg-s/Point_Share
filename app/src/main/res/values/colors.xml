@@ -12,6 +12,7 @@
     <color name="floating_button_color">#CCFFFFFF</color>
     <color name="floating_button_border">#40000000</color>
 
+    <color name="myPage_review_color">#88FFFFFF</color>
     <!--MAIN-->
     <color name="black">#000000</color>
     <color name="main_skyblue">#6BC8E8</color>

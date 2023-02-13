@@ -3,30 +3,36 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="136dp"
     android:layout_marginTop="16dp"
     android:gravity="center">
 
 
     <androidx.cardview.widget.CardView
-        android:layout_width="327dp"
+        android:layout_width="match_parent"
         android:layout_height="136dp"
         app:cardCornerRadius="8dp">
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/review_img"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:background="@drawable/temp_img">
+            android:scaleType="centerCrop"/>
 
+        <LinearLayout
+            android:id="@+id/background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/myPage_review_color"
+            android:gravity="center"
+            android:orientation="vertical">
             <TextView
                 android:id="@+id/my_page_review_tv1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:text="TITLE"
-                android:textColor="@color/white"
+                android:textColor="@color/shadow"
                 android:fontFamily="@font/sf_compat_regular"
                 android:textStyle="bold"
                 android:textSize="16sp"
@@ -40,7 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="작성 날짜"
-                android:textColor="@color/white"
+                android:textColor="@color/shadow"
                 android:fontFamily="@font/sf_compat_regular"
                 android:textSize="14sp"
                 app:layout_constraintTop_toBottomOf="@id/my_page_review_tv1"

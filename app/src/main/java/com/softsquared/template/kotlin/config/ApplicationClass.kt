@@ -1,8 +1,14 @@
 package com.softsquared.template.kotlin.config
 
 import android.app.Application
+import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import android.util.Log
+import androidx.activity.result.ActivityResultLauncher
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -12,7 +18,7 @@ import com.kakao.sdk.common.KakaoSdk
 
 // 앱이 실행될때 1번만 실행이 됩니다.
 class ApplicationClass : Application() {
-    val API_URL = "https://edu-api-test.softsquared.com/"
+    val API_URL = "http://potshe.shop:3000/"
 
     // 테스트 서버 주소
     // val API_URL = "http://dev-api.test.com/"
@@ -44,6 +50,9 @@ class ApplicationClass : Application() {
         const val PARAM_KEY_PRODUCT_ID = "product_id"
         const val PARAM_KEY_REVIEW = "review_content"
         const val PARAM_KEY_RATING = "rating"
+
+        //임시 유저 아이디
+        val user_id = "d0ddc294-97d8-11ed-931f-069e6ea2831c"
     }
 
     // 앱이 처음 생성되는 순간, SP를 새로 만들어주고, 레트로핏 인스턴스를 생성합니다.
@@ -77,5 +86,28 @@ class ApplicationClass : Application() {
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+    }
+
+    fun getRealPathFromURI(uri: Uri, context: Context):String {
+        val buildName = Build.MANUFACTURER
+        if(buildName.equals("Xiaomi")){
+            return uri.path!!
+        }
+        var columnIndex = 0
+        val proj = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor = context.contentResolver.query(uri, proj, null, null, null)
+        if(cursor!!.moveToFirst()){
+            columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        }
+        val result = cursor.getString(columnIndex)
+        cursor.close()
+        return result
+    }
+
+    fun navigateGallery(imageResult:ActivityResultLauncher<Intent>) {
+        val intent = Intent(Intent.ACTION_PICK)
+        // 가져올 컨텐츠들 중에서 Image 만을 가져온다.
+        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+        imageResult.launch(intent)
     }
 }

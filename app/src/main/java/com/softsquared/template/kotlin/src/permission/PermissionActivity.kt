@@ -9,7 +9,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.softsquared.template.kotlin.config.BaseActivity
 import com.softsquared.template.kotlin.databinding.ActivityPermissionBinding
-import com.softsquared.template.kotlin.src.splash.SplashActivity
+import com.softsquared.template.kotlin.src.main.MainActivity
 
 class PermissionActivity : BaseActivity<ActivityPermissionBinding>(ActivityPermissionBinding::inflate) {
 
@@ -31,7 +31,6 @@ class PermissionActivity : BaseActivity<ActivityPermissionBinding>(ActivityPermi
             Manifest.permission.ACCESS_FINE_LOCATION
         )
 
-
         if (permissionCheck_Location != PackageManager.PERMISSION_GRANTED) {
             if(permissionCheck_Location != PackageManager.PERMISSION_GRANTED)
                 ActivityCompat.requestPermissions(
@@ -41,7 +40,7 @@ class PermissionActivity : BaseActivity<ActivityPermissionBinding>(ActivityPermi
                 )
 
         } else {
-            var intent = Intent(this, SplashActivity::class.java)
+            var intent = Intent(this, MainActivity::class.java)
             startActivity(intent, null)
             finish()
         }
@@ -57,7 +56,7 @@ class PermissionActivity : BaseActivity<ActivityPermissionBinding>(ActivityPermi
             for (i in grantResults.indices) {
                 //허용됬다면
                 if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                    var intent = Intent(this, SplashActivity::class.java)
+                    var intent = Intent(this, MainActivity::class.java)
                     startActivity(intent, null)
                     finish()
                 } else {

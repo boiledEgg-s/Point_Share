@@ -51,6 +51,24 @@
                     android:text="포인트 작성"
                     android:textSize="16sp"
                     android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/review_delete_btn"
+                    android:visibility="invisible"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:layout_margin="20dp"
+                    android:textAlignment="center"
+                    android:text="삭제"
+                    android:fontFamily="@font/sf_compat_regular"
+                    android:textSize="12sp"
+                    android:textColor="@color/danger"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageView
